@@ -1,0 +1,36 @@
+.app-wrapper {
+  display: grid;
+  width: 1000px;
+  grid-template-areas:
+  "h h"
+  "n c";
+  grid-template-rows: 60px 1fr;
+  grid-template-columns: 2fr 10fr;
+  /* grid-gap: 10px; */
+  
+  
+}
+.nav {
+grid-area: n;
+background-color: rgb(200, 200, 238);
+}
+.header {
+grid-area: h;
+background-color: rgb(93, 152, 240);
+width: 1000px;
+}
+.header img {
+  margin: 0 auto;
+  width: 800px;
+}
+.profile img {
+  width: 800px;
+}
+.ava img {
+  width: 200;
+  height: 200;
+}
+.profile {
+grid-area: c ;
+background-color: rgb(55, 117, 211);
+}
