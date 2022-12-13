@@ -11,3 +11,12 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.app-wrapper-content {
+  grid-area: c;
+  background-color: aquamarine;
+
+}
+
+.app-wrapper-content img {
+  width: 800px;
+}
