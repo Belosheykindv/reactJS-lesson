@@ -1,4 +1,5 @@
 .app-wrapper {
+  margin-left: 25%;
   display: grid;
   width: 1000px;
   grid-template-areas:
