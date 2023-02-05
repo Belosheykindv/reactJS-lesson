@@ -1,15 +1,22 @@
-import React from 'react';
+import React, { createRef } from 'react';
 import P from './Post.module.css';
+import { addPostLikeActionCreator } from '../../../../Redux/profilePage-reducer';
 const Post = (props) => {
 
-  return <div className={P.item}> <img src='https://project-nerd.com/wp-content/uploads/2020/05/ang.jpeg'></img>
-    {props.message}
+  let addLike = () => {
+    let postId = props.postId
+    props.dispatch(addPostLikeActionCreator(postId))
+  }
+  return <div key={props.postId} className={P.item}>
     <div>
-      <span>like</span> {props.likesCount} share {props.share}
-      
+      <img src={props.img}></img>
+      {props.message}
     </div>
-
-
+    <div>
+      <button onClick={addLike}><span>like</span></button>
+      {props.likesCount}
+      <button>Share</button><span>{props.share}</span>
+    </div>
   </div>
 
 }
