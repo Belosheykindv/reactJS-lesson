@@ -1,12 +1,44 @@
 import React from 'react';
 import P from './ProfileInfo.module.css';
-
-const ProfileInfo = () => {
-  return <div className={P.profile}>
-    <div className={P.profileAva}>
-      <img src='https://sun9-north.userapi.com/sun9-86/s/v1/if1/ToKgJTe2mowC6RA731QdZv8-5CmN7JIgiRV8bg6AiaNy0OOWgb-U-SCAh7YgWTlFf_2QtaXt.jpg?size=791x1080&quality=96&type=album'></img>
+import Anonym from '../../../Images/userPhoto.png'
+import Preloader from '../../Common/Preloader/preloader';
+import ProfileStatus from '../ProfileStatus';
+import ProfileAboutMe from './ProfileAboutMe';
+const ProfileInfo = (props) => {
+  if (!props.profile) {
+    return <Preloader />
+  }
+  return <div>
+    <div className={P.profile}>
+      <img src={props.profile.photos.large || Anonym}></img>
+      <div>ID - {props.profile.userId}</div>
+      <div>
+        <div>Кто я - {props.profile.fullName}</div>
+        <ProfileStatus
+          userId={props.userId}
+          ownerId={props.ownerId}
+          status={props.userStatus}
+          updateUserProfileStatus={props.updateUserProfileStatus} />
+        <div>
+          {<ProfileAboutMe
+            profile={props.profile}
+            userId={props.userId}
+            ownerId={props.ownerId}
+            aboutMe={props.aboutMe}
+            updateAboutMe={props.updateAboutMe}
+          />}
+          <div>Работа - {props.profile.lookingForAJobDescription || 'пусто'}</div>
+        </div>
+        <div>
+          <div>Мои контакты</div>
+          <div>ВК - {props.profile.contacts.vk || 'пусто'}</div>
+          <div>Твиттер - {props.profile.contacts.twitter || 'пусто'}</div>
+          <div>Инстаграмм - {props.profile.contacts.instagram || 'пусто'}</div>
+          <div>ГитХаб - {props.profile.contacts.github || 'пусто'}</div>
+          <div>Фэйсбук - {props.profile.contacts.facebook || 'пусто'}</div>
+        </div>
+      </div>
     </div>
-    <div className={P.descriptionBlock}>ava + description</div>
   </div>
 }
 

@@ -1,6 +1,11 @@
+import { profileAPI } from "../Api/apiRequest";
 const UPDATE_NEW_POST_TEXT = 'UPDATE-NEW-POST-TEXT';
 const ADD_POST = 'ADD-POST';
 const ADD_LIKE = 'ADD-LIKE';
+const SET_USER_PROFILE = 'SET_USER_PROFILE';
+const SET_USER_PROFILE_STATUS = 'SET_USER_PROFILE_STATUS';
+const UPDATE_ABOUT_ME = 'UPDATE_ABOUT_ME';
+const SET_USER_ABOUT_ME = 'SET_USER_ABOUT_ME'
 let initialState = {
     posts: [
         { id: 1, message: 'Reducers 1', likesCount: 11, share: 777, imgSrc: 'https://project-nerd.com/wp-content/uploads/2020/05/ang.jpeg' },
@@ -17,32 +22,35 @@ let initialState = {
         { id: 5, name: 'Kristina', imgSrc: 'https://catherineasquithgallery.com/uploads/posts/2021-03/thumbs/1614604937_99-p-avatarki-na-belom-fone-117.jpg' }
     ],
     newPostText: '',
+    profile: null,
+    profileStatus: '',
+    aboutMe: ''
 
 }
 const profileReducer = (state = initialState, action) => {
 
     switch (action.type) {
         case ADD_POST: {
-           
+
             let newPost = {
                 id: 6,
                 message: state.newPostText,
                 likesCount: 0,
                 share: 2,
-                imgSrc: 'https://sun9-north.userapi.com/sun9-86/s/v1/if1/ToKgJTe2mowC6RA731QdZv8-5CmN7JIgiRV8bg6AiaNy0OOWgb-U-SCAh7YgWTlFf_2QtaXt.jpg?size=791x1080&quality=96&type=album'
+                imgSrc: 'https://static-cdn.jtvnw.net/jtv_user_pictures/d61321a5-9a02-4f46-b718-70e3c4260d66-profile_image-70x70.png'
             };
             return {
                 ...state,
-                posts:[...state.posts,newPost],
-                newPostText:''
+                posts: [...state.posts, newPost],
+                newPostText: ''
             };
         }
 
         case UPDATE_NEW_POST_TEXT: {
-        
+
             return {
                 ...state,
-                newPostText:action.text
+                newPostText: action.text
             };
         }
 
@@ -57,17 +65,75 @@ const profileReducer = (state = initialState, action) => {
             stateCopy.post.likesCount += 1;
             return stateCopy;
         }
+        case SET_USER_PROFILE: {
+            return { ...state, profile: action.profile }
+        }
+        case SET_USER_PROFILE_STATUS: {
+            return { ...state, profileStatus: action.profileStatus }
+        }
+        case SET_USER_ABOUT_ME: {
+            return { ...state, aboutMe: action.aboutMe }
+        }
+        case UPDATE_ABOUT_ME: {
+            return { ...state, aboutMe: action.aboutMe }
+        }
         default: return state;
     }
 }
 export const addPostTextActionCreator = () => {
-    return { type: 'ADD-POST' }
+    return { type: ADD_POST }
 }
 export const updateNewPostActionCreator = (newText) => {
-    return { type: 'UPDATE-NEW-POST-TEXT', text: newText }
+    return { type: UPDATE_NEW_POST_TEXT, text: newText }
 }
 export const addPostLikeActionCreator = (postId) => {
-    return { type: 'ADD-LIKE', postId: postId }
+    return { type: ADD_LIKE, postId: postId }
 }
+export const setUserProfile = (profile) => {
+    return { type: SET_USER_PROFILE, profile }
+}
+
+export const setUserProfileStatus = (profileStatus) => {
+    return { type: SET_USER_PROFILE_STATUS, profileStatus }
+}
+export const setUserAboutMe = (aboutMe) => {
+    return { type: SET_USER_ABOUT_ME, aboutMe }
+}
+export const updateProfileAboutMee = (aboutMe) => {
+    return { type: UPDATE_ABOUT_ME, aboutMe };
+}
+
+export const getUserProfile = (userId) => (dispatch) => {
+    profileAPI.getUserProfile(userId).then(data => {
+        dispatch(setUserProfile(data));
+    });
+}
+export const getUserProfileStatus = (userId) => (dispatch) => {
+    profileAPI.getUserProfileStatus(userId).then(data => {
+        dispatch(setUserProfileStatus(data));
+    });
+}
+export const getUserAboutMe = (userId) => (dispatch) => {
+    debugger;
+    profileAPI.getUserProfile(userId).then(data => {
+        dispatch(setUserAboutMe(data.aboutMe));
+    });
+}
+export const updateUserProfileStatus = (status) => (dispatch) => {
+    profileAPI.updateUserProfileStatus(status).then(respone => {
+        if (respone.resultCode === 0) {
+            dispatch(setUserProfileStatus(status))
+        }
+    }
+    )
+}
+export const updateAboutMe = (AboutMe, LookingForAJobDescription, FullName) => (dispatch) => {
+    profileAPI.updateAboutMe(AboutMe, LookingForAJobDescription, FullName).then(response => {
+        if (response.resultCode === 0) {
+            dispatch(updateProfileAboutMee(AboutMe))
+        }
+    })
+}
+
 export default profileReducer;
 

@@ -1,5 +1,7 @@
 import React from "react";
+import { Navigate } from "react-router-dom";
 const Settings = (props) => {
+    if (props.auth === false) return <Navigate to={'/login'} />
     return <div>
             <SelectedSetting selectedSection='Account settings' />
             <SelectedSetting selectedSection='Security settings' />

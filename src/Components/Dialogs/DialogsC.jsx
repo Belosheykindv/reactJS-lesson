@@ -2,6 +2,7 @@ import React from "react";
 import s from './Dialogs.module.css';
 import Message from "./Message/Message";
 import DialogItem from "./DialogItem/DialogItem";
+import { Navigate } from "react-router-dom";
 
 class Dialogs extends React.Component {
     constructor(props) {
@@ -21,7 +22,7 @@ class Dialogs extends React.Component {
         let state = (this.props.dialogsPage);
         let dialogElements = state.dialogs.map(d => <DialogItem name={d.name} id={d.id} imgSrc={d.imgSrc} key={d.id} />);
         let messageElement = state.messages.map(m => <Message message={m.message} key={m.id} />);
-
+        if (this.props.auth === false) return <Navigate  to={'/login'}/>
         return (
             <nav className={s.dialogs}>
                 <div >
