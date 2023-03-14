@@ -3,9 +3,9 @@ import P from './Post.module.css';
 import { addPostLikeActionCreator } from '../../../../Redux/profilePage-reducer';
 const Post = (props) => {
 
-  let addLike = () => {
+  let onAddLike = () => {
     let postId = props.postId
-    props.dispatch(addPostLikeActionCreator(postId))
+    props.addLike(postId)
   }
   return <div key={props.postId} className={P.item}>
     <div>
@@ -13,7 +13,7 @@ const Post = (props) => {
       {props.message}
     </div>
     <div>
-      <button onClick={addLike}><span>like</span></button>
+      <button onClick={onAddLike}><span>like</span></button>
       {props.likesCount}
       <button>Share</button><span>{props.share}</span>
     </div>
