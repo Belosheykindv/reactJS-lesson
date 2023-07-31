@@ -3,41 +3,30 @@ import s from './Dialogs.module.css';
 import Message from "./Message/Message";
 import DialogItem from "./DialogItem/DialogItem";
 import { Navigate } from "react-router-dom";
+import { Field, reduxForm } from "redux-form";
+import { maxLengthCreator, required } from "../../Utils/Validators/validators";
+import { FormCreate, TextArea } from "../Common/FormControls/formControls";
 
 class Dialogs extends React.Component {
     constructor(props) {
         super(props);
         this.messageArea = React.createRef();
     }
-    addMessage = () => {
-        this.props.addDialogMessage()
+    addMessage = (values) => {
+        this.props.addDialogMessage(values.newMessageBody)
     };
-    onDialogMessageChange = () => {
-
-        let text = this.messageArea.current.value;
-        this.props.dialogMessageChange(text)
-    };
-
     render() {
         let state = (this.props.dialogsPage);
         let dialogElements = state.dialogs.map(d => <DialogItem name={d.name} id={d.id} imgSrc={d.imgSrc} key={d.id} />);
         let messageElement = state.messages.map(m => <Message message={m.message} key={m.id} />);
-        if (this.props.auth === false) return <Navigate  to={'/login'}/>
+        if (this.props.auth === false) return <Navigate to={'/login'} />
         return (
             <nav className={s.dialogs}>
                 <div >
                     {dialogElements}
                 </div>
                 <div className={s.messages}>
-                    <div><textarea
-
-                        onChange={this.onDialogMessageChange}
-                        ref={this.messageArea}
-                        value={state.newDialogText}
-                        placeholder='Введите сообщение' /></div>
-                    <div>
-                        <button className={s.button} onClick={this.addMessage}>Отправить сообщение</button>
-                    </div>
+                    <NewMessageFormRedux onSubmit={this.addMessage} />
                     {messageElement}
                 </div>
                 <div className={s.messages}>Здесь могла бы быть ваша реклама</div>
@@ -45,35 +34,19 @@ class Dialogs extends React.Component {
         )
     }
 }
+const maxLength100 = maxLengthCreator(100);
+const NewMessageForm = (props) => {
+    return (
+        <form onSubmit={props.handleSubmit}>
+            <div>
+                <Field component={FormCreate} fieldType={'textarea'} placeholder='Введите сообщениеee' name={'newMessageBody'} validate={[required, maxLength100]} />
+            </div>
+            <div>
+                <button className={s.button}>Отправить сообщение</button>
+            </div>
+        </form>
+    )
+}
+const NewMessageFormRedux = reduxForm({ form: "dialogAddMessageForm" })(NewMessageForm);
 
-//     const Dialogs = (props) => {
-//         let state = (props.dialogsPage)
-
-//         let dialogElements = state.dialogs.map(d => <DialogItem name={d.name} id={d.id} imgSrc={d.imgSrc} key={d.id} />);
-//         let messageElement = state.messages.map(m => <Message message={m.message} key={m.id} />);
-//         let newDialogElement = React.createRef();
-
-//         let addMessage = () => {
-//             props.addDialogMessage();
-//         }
-//         let onDialogMessageChange = () => {
-//             let text = newDialogElement.current.value;
-//             props.dialogMessageChange(text);
-//         }
-
-//     return (<nav className={s.dialogs}>
-//         <div >
-//             {dialogElements}
-//         </div>
-//         <div className={s.messages}>
-//             <div><textarea onChange={onDialogMessageChange} ref={newDialogElement} value={state.newDialogText} placeholder='Введите сообщение' /></div>
-//             <div>
-//                 <button className={s.button} onClick={addMessage}>Отправить сообщение</button>
-//             </div>
-//             {messageElement}
-//         </div>
-//         <div className={s.messages}>Здесь могла бы быть ваша реклама</div>
-//     </nav>
-//     )
-// }
 export default Dialogs;

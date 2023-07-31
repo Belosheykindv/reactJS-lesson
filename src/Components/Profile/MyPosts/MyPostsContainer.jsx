@@ -1,39 +1,26 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { addPostTextActionCreator, updateNewPostActionCreator, addPostLikeActionCreator } from '../../../Redux/profilePage-reducer';
+import { addPostTextActionCreator, addPostLikeActionCreator } from '../../../Redux/profilePage-reducer';
 import MyPosts from './MyPosts';
-
-// const MyPostsContainer = (props) => {
-//   const addLike = (postID) => {
-//     props.dispatch(addPostLikeActionCreator(postID))
-//   }
-//   const addPost = () => {
-//     props.dispatch(addPostTextActionCreator())
-//   }
-//   const onPostChange = (newText) => {
-//     // let newText = newPostElement.current.value;
-//     props.dispatch(updateNewPostActionCreator(newText))
-//   }
-//   return <MyPosts
-//     updateNewPostActionCreator={onPostChange}
-//     newPostElement={props.store.newPostElement}
-//     posts={props.store.profilePage.posts}
-//     addPost={addPost}
-//     addLike={addLike} />
-// }
+import { withAuthRedirect } from '../../../Hoc/withAuthRedirect';
+import { compose } from 'redux';
+import { withRouter } from '../../../Hoc/withRouter';
 
 const mapStateToProps = (state) => {
   return {
-    profilePage:(state.profilePage)
+    profilePage: (state.profilePage),
+    isAuth: state.auth.isAuth,
+    ownerId: state.auth.id
   }
 }
 const mapDispatchToProps = (dispatch) => {
   return {
-    addPost: (postID) => { dispatch(addPostTextActionCreator(postID)) },
+    addPost: (newPostText) => { dispatch(addPostTextActionCreator(newPostText)) },
     addLike: (postID) => { dispatch(addPostLikeActionCreator(postID)) },
-    updateNewPostActionCreator: (newText) => { dispatch(updateNewPostActionCreator(newText)) }
-
   }
 }
-const MyPostsContainer = connect(mapStateToProps, mapDispatchToProps)(MyPosts)
-export default MyPostsContainer;
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withRouter,
+  withAuthRedirect
+)(MyPosts);

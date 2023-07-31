@@ -56,6 +56,6 @@ export default compose(
         {
             getUsers, getPageUsers,
             follow, unfollow, setUsers, setCurrentPage, setTotalUsersCount, toggleIsFetching, togglefollowingProgress
-        }),
-    withAuthRedirect)
+        }), withAuthRedirect)
+        
     (UsersApiContainer)

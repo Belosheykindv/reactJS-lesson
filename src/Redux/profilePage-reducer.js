@@ -1,11 +1,12 @@
 import { profileAPI } from "../Api/apiRequest";
-const UPDATE_NEW_POST_TEXT = 'UPDATE-NEW-POST-TEXT';
+import { stopSubmit } from "redux-form";
 const ADD_POST = 'ADD-POST';
 const ADD_LIKE = 'ADD-LIKE';
 const SET_USER_PROFILE = 'SET_USER_PROFILE';
 const SET_USER_PROFILE_STATUS = 'SET_USER_PROFILE_STATUS';
 const UPDATE_ABOUT_ME = 'UPDATE_ABOUT_ME';
 const SET_USER_ABOUT_ME = 'SET_USER_ABOUT_ME'
+const UPDATE_PROFILE_PHOTO = 'UPDATE_PROFILE_PHOTO'
 let initialState = {
     posts: [
         { id: 1, message: 'Reducers 1', likesCount: 11, share: 777, imgSrc: 'https://project-nerd.com/wp-content/uploads/2020/05/ang.jpeg' },
@@ -24,17 +25,18 @@ let initialState = {
     newPostText: '',
     profile: null,
     profileStatus: '',
-    aboutMe: ''
+    aboutMe: '',
+    photo: null,
+    editModeAboutMe: false
 
 }
 const profileReducer = (state = initialState, action) => {
 
     switch (action.type) {
         case ADD_POST: {
-
             let newPost = {
                 id: 6,
-                message: state.newPostText,
+                message: action.newPostText,
                 likesCount: 0,
                 share: 2,
                 imgSrc: 'https://static-cdn.jtvnw.net/jtv_user_pictures/d61321a5-9a02-4f46-b718-70e3c4260d66-profile_image-70x70.png'
@@ -43,14 +45,6 @@ const profileReducer = (state = initialState, action) => {
                 ...state,
                 posts: [...state.posts, newPost],
                 newPostText: ''
-            };
-        }
-
-        case UPDATE_NEW_POST_TEXT: {
-
-            return {
-                ...state,
-                newPostText: action.text
             };
         }
 
@@ -74,17 +68,21 @@ const profileReducer = (state = initialState, action) => {
         case SET_USER_ABOUT_ME: {
             return { ...state, aboutMe: action.aboutMe }
         }
-        case UPDATE_ABOUT_ME: {
-            return { ...state, aboutMe: action.aboutMe }
+        // case UPDATE_ABOUT_ME: {
+        //     return {
+        //         ...state, profile: {
+        //             ...state.profile, profile: action.profileAboutMe
+        //         }
+        //     }
+        // }
+        case UPDATE_PROFILE_PHOTO: {
+            return { ...state, profile: { ...state.profile, photos: action.photos } }
         }
         default: return state;
     }
 }
-export const addPostTextActionCreator = () => {
-    return { type: ADD_POST }
-}
-export const updateNewPostActionCreator = (newText) => {
-    return { type: UPDATE_NEW_POST_TEXT, text: newText }
+export const addPostTextActionCreator = (newPostText) => {
+    return { type: ADD_POST, newPostText }
 }
 export const addPostLikeActionCreator = (postId) => {
     return { type: ADD_LIKE, postId: postId }
@@ -99,8 +97,11 @@ export const setUserProfileStatus = (profileStatus) => {
 export const setUserAboutMe = (aboutMe) => {
     return { type: SET_USER_ABOUT_ME, aboutMe }
 }
-export const updateProfileAboutMee = (aboutMe) => {
-    return { type: UPDATE_ABOUT_ME, aboutMe };
+// export const updateProfileAboutMee = (profileAboutMe) => {
+//     return { type: UPDATE_ABOUT_ME, profileAboutMe };
+// }
+export const updateProfilePhoto = (photos) => {
+    return { type: UPDATE_PROFILE_PHOTO, photos };
 }
 
 export const getUserProfile = (userId) => (dispatch) => {
@@ -114,7 +115,6 @@ export const getUserProfileStatus = (userId) => (dispatch) => {
     });
 }
 export const getUserAboutMe = (userId) => (dispatch) => {
-    debugger;
     profileAPI.getUserProfile(userId).then(data => {
         dispatch(setUserAboutMe(data.aboutMe));
     });
@@ -127,12 +127,34 @@ export const updateUserProfileStatus = (status) => (dispatch) => {
     }
     )
 }
-export const updateAboutMe = (AboutMe, LookingForAJobDescription, FullName) => (dispatch) => {
-    profileAPI.updateAboutMe(AboutMe, LookingForAJobDescription, FullName).then(response => {
-        if (response.resultCode === 0) {
-            dispatch(updateProfileAboutMee(AboutMe))
-        }
-    })
+
+export const updateAboutMe = (profile) => async (dispatch, getState) => {
+    const userId = getState().auth.id
+    const response = await profileAPI.updateAboutMe(profile)
+    if (response.resultCode === 0) {
+        dispatch(getUserProfile(userId))
+    } else {
+        const messages = response.messages;
+        if (messages.length === 0) return
+        const contactsKeys = Object.keys(profile.contacts);
+        const errors = {};
+        contactsKeys.forEach((key) => {
+            const errorMessage = messages.find((error) => {
+                return error.toLowerCase().includes(key)
+            })
+            if (errorMessage) {
+                errors[key] = errorMessage
+            }
+        })
+
+        dispatch(stopSubmit('aboutMe', { 'contacts': errors }));
+        return Promise.reject(errors)
+    }
+
+}
+export const updateUserPhoto = (photos) => async (dispatch) => {
+    const response = await profileAPI.updateUserPhoto(photos)
+    if (response.resultCode === 0) { dispatch(updateProfilePhoto(response.data.photos)) }
 }
 
 export default profileReducer;

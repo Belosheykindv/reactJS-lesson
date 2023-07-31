@@ -36,6 +36,14 @@ export const authAPI = {
     auth: async () => {
         const response = await instance.get(`auth/me`)
         return response.data
+    },
+    login: async (email, password, rememberMe) => {
+        const response = await instance.post(`auth/login`, { email, password, rememberMe })
+        return response.data
+    },
+    logout: async () => {
+        const response = await instance.delete(`auth/login`)
+        return response.data
     }
 }
 export const profileAPI = {
@@ -51,9 +59,23 @@ export const profileAPI = {
         const response = await instance.put(`profile/status`, { status });
         return response.data;
     },
-    updateAboutMe: async (AboutMe, LookingForAJobDescription, FullName) => {
-        debugger;
-        const response = await instance.put(`profile`, { AboutMe, LookingForAJobDescription, FullName });
+    // updateAboutMe: async (lookingForAJobDescription, fullName, aboutMe) => {
+    //     const response = await instance.put(`profile`, { lookingForAJobDescription, fullName, aboutMe });
+    //     return response.data;
+    // },
+    updateAboutMe: async (profile) => {
+        const response = await instance.put(`profile`, profile);
         return response.data;
+    },
+    updateUserPhoto: async (photo) => {
+        const formData = new FormData();
+        formData.append("image", photo);
+        const response = await instance.put(`profile/photo`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+        return response.data
+
     }
 }

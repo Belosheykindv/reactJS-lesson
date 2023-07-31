@@ -13,9 +13,9 @@ const Post = (props) => {
       {props.message}
     </div>
     <div>
-      <button onClick={onAddLike}><span>like</span></button>
+      <button onClick={onAddLike}><span>Лайк</span></button>
       {props.likesCount}
-      <button>Share</button><span>{props.share}</span>
+      <button>Репост</button><span>{props.share}</span>
     </div>
   </div>
 

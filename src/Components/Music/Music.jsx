@@ -11,7 +11,7 @@ const Music = (props) => {
     </div>
 
 }
-let AuthRedirect = withAuthRedirect(Music)
+let MusicContainer = withAuthRedirect(Music)
 const Song = (props) => {
     return <div>
         <span>{props.songName}</span>
@@ -19,4 +19,4 @@ const Song = (props) => {
 
 }
 
-export default AuthRedirect;
+export default MusicContainer;

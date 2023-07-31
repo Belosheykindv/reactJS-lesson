@@ -3,17 +3,23 @@ import P from './ProfileInfo.module.css';
 import Anonym from '../../../Images/userPhoto.png'
 import Preloader from '../../Common/Preloader/preloader';
 import ProfileStatus from '../ProfileStatus';
-import ProfileAboutMe from './ProfileAboutMe';
+import { ProfileAboutMe } from './ProfileAboutMe';
+
 const ProfileInfo = (props) => {
   if (!props.profile) {
     return <Preloader />
   }
+  const onMainPhotoSelected = (e) => {
+    if (e.target.files.length) {
+      props.updateUserPhoto(e.target.files[0])
+    }
+  }
   return <div>
     <div className={P.profile}>
       <img src={props.profile.photos.large || Anonym}></img>
-      <div>ID - {props.profile.userId}</div>
+      {!props.userId && <div><input type={"file"} onChange={onMainPhotoSelected} /></div>}
+      <div><b>ID -</b> {props.profile.userId}</div>
       <div>
-        <div>Кто я - {props.profile.fullName}</div>
         <ProfileStatus
           userId={props.userId}
           ownerId={props.ownerId}
@@ -24,19 +30,11 @@ const ProfileInfo = (props) => {
             profile={props.profile}
             userId={props.userId}
             ownerId={props.ownerId}
-            aboutMe={props.aboutMe}
             updateAboutMe={props.updateAboutMe}
+            editModeAboutMe={props.editModeAboutMe}
           />}
-          <div>Работа - {props.profile.lookingForAJobDescription || 'пусто'}</div>
         </div>
-        <div>
-          <div>Мои контакты</div>
-          <div>ВК - {props.profile.contacts.vk || 'пусто'}</div>
-          <div>Твиттер - {props.profile.contacts.twitter || 'пусто'}</div>
-          <div>Инстаграмм - {props.profile.contacts.instagram || 'пусто'}</div>
-          <div>ГитХаб - {props.profile.contacts.github || 'пусто'}</div>
-          <div>Фэйсбук - {props.profile.contacts.facebook || 'пусто'}</div>
-        </div>
+
       </div>
     </div>
   </div>

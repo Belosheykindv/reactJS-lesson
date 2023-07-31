@@ -1,5 +1,4 @@
 const ADD_DIALOG_TEXT = 'ADD-DIALOG-TEXT';
-const UPDATE_DIALOG_TEXT = 'UPDATE-DIALOG-TEXT';
 let initialReducer = {
     dialogs: [
         { id: '1', name: 'Alina', imgSrc: 'https://project-nerd.com/wp-content/uploads/2020/05/ang.jpeg' },
@@ -11,7 +10,6 @@ let initialReducer = {
         { id: 1, message: 'Hi' },
         { id: 2, message: 'Hello' },
         { id: 3, message: 'Hola' },],
-    newDialogText: ''
 }
 const dialogsReducer = (state = initialReducer, action) => {
 
@@ -19,7 +17,7 @@ const dialogsReducer = (state = initialReducer, action) => {
         case ADD_DIALOG_TEXT: {
             let newMessage = {
                 id: 4,
-                message: state.newDialogText,
+                message: action.newMessageBody,
             };
             return {
                 ...state,
@@ -27,20 +25,10 @@ const dialogsReducer = (state = initialReducer, action) => {
                 newDialogText: ''
             };
         }
-
-        case UPDATE_DIALOG_TEXT: {
-            return {
-                ...state,
-                newDialogText: action.newText
-            };
-        }
         default: return state;
     }
 }
-export const addDialogMessageActionCreator = () => {
-    return { type: 'ADD-DIALOG-TEXT' }
-}
-export const onDialoMessageChangeActionCreator = (text) => {
-    return { type: 'UPDATE-DIALOG-TEXT', newText: text }
+export const addDialogMessageActionCreator = (newMessageBody) => {
+    return { type: 'ADD-DIALOG-TEXT', newMessageBody }
 }
 export default dialogsReducer;
