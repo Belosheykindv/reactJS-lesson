@@ -4,8 +4,6 @@ import { NavLink } from "react-router-dom"
 import { Button, Input } from "antd"
 import { useDispatch, useSelector } from "react-redux"
 import { sendMessage, startMessagesListening, stopMessagesListening, unmountChat } from "../../Redux/chatReducer"
-import { reduxForm, Field } from 'redux-form'
-import { SelectField, TextField, } from 'redux-form-antd'
 
 const ChatPage = () => {
     return <div>
@@ -64,7 +62,6 @@ const AddMessageForm = () => {
     }
     return <div>
         <div><Input ref={inputRef} name={'chatInput'} onChange={(e) => setMessage(e.currentTarget.value)} value={message} placeholder="Введите сообщение" ></Input></div>
-        <form><Field name="chatMessage" component={TextField} placeholder="Введите сообщение" /></form>
         <br></br>
         <div><Button
             disabled={status !== 'ready'}
