@@ -1,7 +1,8 @@
 import React, { createRef } from 'react';
 import P from './Post.module.scss';
 import { addPostLikeActionCreator } from '../../../../Redux/profilePage-reducer';
-const Post = (props) => {
+import { Button } from 'antd';
+const Post = React.memo((props) => {
   let onAddLike = () => {
     let postId = props.postId
     props.addLike(postId)
@@ -12,11 +13,11 @@ const Post = (props) => {
       <span className={P.message}>&nbsp; {props.message}</span>
     </div>
     <div>
-      <button onClick={onAddLike}><span>Лайк</span></button> {props.likesCount}
-      <button>Репост</button><span>{props.share}-клюс - {props.postId}</span> 
+      <Button onClick={onAddLike} type={'primary'}><span>Лайк</span></Button> {props.likesCount}
+      <Button type={'primary'}>Репост</Button><span>{props.share}</span>
     </div>
   </div>
 
 
-}
+})
 export default Post;

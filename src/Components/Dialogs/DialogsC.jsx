@@ -7,33 +7,55 @@ import { Field, reduxForm } from "redux-form";
 import { maxLengthCreator, required } from "../../Utils/Validators/validators";
 import { FormCreate, TextArea } from "../Common/FormControls/formControls";
 
-class Dialogs extends React.Component {
-    constructor(props) {
-        super(props);
-        this.messageArea = React.createRef();
-    }
-    addMessage = (values) => {
-        this.props.addDialogMessage(values.newMessageBody)
+const Dialogs = (props) => {
+    // const messageArea = React.createRef();
+    const addMessage = (values) => {
+        props.addDialogMessage(values.newMessageBody)
     };
-    render() {
-        let state = (this.props.dialogsPage);
-        let dialogElements = state.dialogs.map(d => <DialogItem name={d.name} id={d.id} imgSrc={d.imgSrc} key={d.id} />);
-        let messageElement = state.messages.map(m => <Message message={m.message} key={m.id} />);
-        if (this.props.auth === false) return <Navigate to={'/login'} />
-        return (
-            <nav className={s.dialogs}>
-                <div >
-                    {dialogElements}
-                </div>
-                <div className={s.messages}>
-                    <NewMessageFormRedux onSubmit={this.addMessage} />
-                    {messageElement}
-                </div>
-                <div className={s.messages}>Здесь могла бы быть ваша реклама</div>
-            </nav>
-        )
-    }
+    let state = (props.dialogsPage);
+    let dialogElements = state.dialogs.map(d => <DialogItem name={d.name} id={d.id} imgSrc={d.imgSrc} key={d.id} />);
+    let messageElement = state.messages.map(m => <Message message={m.message} key={m.id} />);
+    if (props.auth === false) return <Navigate to={'/login'} />
+    return (
+        <nav className={s.dialogs}>
+            <div >
+                {dialogElements}
+            </div>
+            <div className={s.messages}>
+                <NewMessageFormRedux onSubmit={addMessage} />
+                {messageElement}
+            </div>
+            <div className={s.messages}>Здесь могла бы быть ваша реклама</div>
+        </nav>
+    )
 }
+// class Dialogs extends React.Component {
+//     constructor(props) {
+//         super(props);
+//         this.messageArea = React.createRef();
+//     }
+//     addMessage = (values) => {
+//         this.props.addDialogMessage(values.newMessageBody)
+//     };
+//     render() {
+//         let state = (this.props.dialogsPage);
+//         let dialogElements = state.dialogs.map(d => <DialogItem name={d.name} id={d.id} imgSrc={d.imgSrc} key={d.id} />);
+//         let messageElement = state.messages.map(m => <Message message={m.message} key={m.id} />);
+//         if (this.props.auth === false) return <Navigate to={'/login'} />
+//         return (
+//             <nav className={s.dialogs}>
+//                 <div >
+//                     {dialogElements}
+//                 </div>
+//                 <div className={s.messages}>
+//                     <NewMessageFormRedux onSubmit={this.addMessage} />
+//                     {messageElement}
+//                 </div>
+//                 <div className={s.messages}>Здесь могла бы быть ваша реклама</div>
+//             </nav>
+//         )
+//     }
+// }
 const maxLength100 = maxLengthCreator(100);
 const NewMessageForm = (props) => {
     return (

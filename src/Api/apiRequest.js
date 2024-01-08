@@ -1,4 +1,5 @@
 import axios from "axios"
+// import { subscribe } from "diagnostics_channel";
 
 const instance = axios.create({
     withCredentials: true,
@@ -21,6 +22,7 @@ export const userAPI = {
     }
 
 }
+// API для подписки/отписки *******************************************
 export const followAPI = {
     delete: async (userId) => {
         const response = await instance.delete(`follow/${userId}`)
@@ -32,6 +34,7 @@ export const followAPI = {
         return response.data;
     }
 }
+// API для страницы авторизации*******************************************
 export const authAPI = {
     auth: async () => {
         const response = await instance.get(`auth/me`)
@@ -46,6 +49,7 @@ export const authAPI = {
         return response.data
     }
 }
+// API для страницы профиля*******************************************
 export const profileAPI = {
     getUserProfile: async (userId) => {
         const response = await instance.get(`profile/` + userId)
@@ -77,5 +81,77 @@ export const profileAPI = {
         })
         return response.data
 
+    }
+}
+// API для страницы чата*******************************************
+let subscribers = {
+    'messages-received': [],
+    'status-changed': []
+}
+let ws = null
+
+const setMessageHandler = (e) => {
+    let newMessages = JSON.parse(e.data)
+    subscribers['messages-received'].forEach(s => s(newMessages))
+}
+const openHandler = () => {
+    notifySubscribersAaboutStatus('ready')
+}
+const closeHandler = () => {
+    console.log('CLOSE WS')
+    notifySubscribersAaboutStatus('pending')
+    // setTimeout(createChannel, 3000);
+}
+
+const errorHandler = () => {
+    notifySubscribersAaboutStatus('error')
+    console.error('Refresh page')
+}
+
+const notifySubscribersAaboutStatus = (status) => {
+    subscribers['status-changed'].forEach(s => s(status))
+}
+const cleanUp = (ws) => {
+    ws?.removeEventListener('close', closeHandler)
+    ws?.removeEventListener('message', setMessageHandler)
+    ws?.removeEventListener('open', openHandler)
+    ws?.removeEventListener('error', errorHandler)
+    // ws?.close()
+}
+
+function createChannel() {
+    cleanUp()
+    ws?.close()
+    ws = new WebSocket('wss://social-network.samuraijs.com/handlers/ChatHandler.ashx')
+    notifySubscribersAaboutStatus('pending')
+    ws.addEventListener('close', closeHandler)
+    ws.addEventListener('message', setMessageHandler)
+    ws.addEventListener('open', openHandler)
+    ws.addEventListener('error', errorHandler)
+    console.log('Channel is OPEN')
+}
+export const chatAPI = {
+    start: () => {
+        createChannel()
+    },
+    stop: () => {
+        subscribers['messages-received'] = []
+        subscribers['status-changed'] = []
+        cleanUp()
+        ws.close()
+        console.log('Channel is closed')
+
+    },
+    subscribe: (eventName, callback) => {
+        subscribers[eventName].push(callback)
+        return () => {
+            subscribers[eventName] = subscribers[eventName].filter(s => s !== callback)
+        }
+    },
+    unsubscribe: (eventName, callback) => {
+        subscribers[eventName] = subscribers[eventName].filter(s => s !== callback)
+    },
+    sendMessage: (message) => {
+        ws?.send(message)
     }
 }

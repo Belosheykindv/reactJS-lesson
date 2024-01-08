@@ -5,16 +5,24 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import { Suspense } from 'react';
+import AppAntD from './AppAntD';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
+// export function useSelector(){
+//     selector(state),
+//     equalityFn: (left,right)=> boolean
+// }
 let rerenderPage = () => {
     ReactDOM.render(
         <React.StrictMode>
             <Provider store={store}>
                 <BrowserRouter>
-                    <App
-                        store={store.getState()}
-                        dispatch={store.dispatch.bind(store)} />
+                    <Suspense fallback={<div>Loading... </div>}>
+                        <AppAntD
+                            store={store.getState()}
+                            dispatch={store.dispatch.bind(store)} />
+                    </Suspense>
                 </BrowserRouter>
             </Provider>
         </React.StrictMode>,

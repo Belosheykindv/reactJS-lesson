@@ -11,11 +11,11 @@ import { connect } from 'react-redux';
 const maxLength14 = maxLengthCreator(14)
 const maxLength30 = maxLengthCreator(30)
 
-export const ProfileAboutMe = ({ profile, ownerId, updateAboutMe, userId }) => {
+export const ProfileAboutMe = ({ profile, ownerId, updateAboutMe, userId, key }) => {
   const [editMode, setEditMode] = useState(false);
   return <div>
-    {!editMode ? <Profile profile={profile} userId={userId} editModeOn={() => { setEditMode(true) }} />
-      : <ProfileForm profile={profile} updateAboutMe={updateAboutMe} editModeOff={() => { setEditMode(false) }} />}
+    {!editMode ? <Profile key={key} profile={profile} userId={userId} editModeOn={() => { setEditMode(true) }} />
+      : <ProfileForm key={key} profile={profile} updateAboutMe={updateAboutMe} editModeOff={() => { setEditMode(false) }} />}
   </div>
 }
 
@@ -55,7 +55,7 @@ const ProfileFormData = ({ handleSubmit, profile, error }) => {
       validate={[required, maxLength14]}
       component={FormCreate} fieldType={'input'} /></div>
     <div> Обо мне -  <Field name={'aboutMe'} component={FormCreate}
-       validate={[required, maxLength30]} 
+      validate={[required, maxLength30]}
       fieldType={'input'} /></div>
     <div> <b>Контакты: </b>{Object.keys(profile.contacts).map((key) => {
       return <div key={key} className={S.contact}> {key}<Field name={'contacts.' + key} component={FormCreate} fieldType={'input'} placeholder={'Введите ваш - ' + key} />  </div>

@@ -21,12 +21,14 @@ const ProfileInfo = (props) => {
       <div><b>ID -</b> {props.profile.userId}</div>
       <div>
         <ProfileStatus
+          key={props.key}
           userId={props.userId}
           ownerId={props.ownerId}
           status={props.userStatus}
           updateUserProfileStatus={props.updateUserProfileStatus} />
         <div>
           {<ProfileAboutMe
+            key={props.key}
             profile={props.profile}
             userId={props.userId}
             ownerId={props.ownerId}

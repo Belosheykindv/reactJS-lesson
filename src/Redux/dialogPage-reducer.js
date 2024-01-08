@@ -12,11 +12,13 @@ let initialReducer = {
         { id: 3, message: 'Hola' },],
 }
 const dialogsReducer = (state = initialReducer, action) => {
-
+    function getRandomInt(max) {
+        return Math.floor(Math.random() * max);
+      }
     switch (action.type) {
         case ADD_DIALOG_TEXT: {
             let newMessage = {
-                id: 4,
+                id: getRandomInt(78),
                 message: action.newMessageBody,
             };
             return {

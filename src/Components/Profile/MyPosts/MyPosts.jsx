@@ -5,7 +5,7 @@ import Post from './Post/Post';
 import { Field, reduxForm } from 'redux-form';
 import { maxLengthCreator, required } from '../../../Utils/Validators/validators';
 import { FormCreate, TextArea } from '../../Common/FormControls/formControls';
-
+import { Button } from "antd";
 
 const MyPosts = (props) => {
   let state = (props.profilePage)

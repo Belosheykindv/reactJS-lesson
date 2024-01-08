@@ -85,7 +85,8 @@ let matStateToProps = (state) => ({
   profile: state.profilePage.profile,
   userStatus: state.profilePage.profileStatus,
   ownerUserId: state.auth.id,
-  editModeAboutMe: state.profilePage.editModeAboutMe
+  editModeAboutMe: state.profilePage.editModeAboutMe,
+  key: state.profilePage.key
   // aboutMe: state.profilePage.aboutMe,
   // lookingForAJobDescription: state.profilePage.lookingForAJobDescription
 })

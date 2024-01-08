@@ -7,7 +7,7 @@
 .dialogsItems {
     padding: 10px;
     text-decoration: none;
-    color: white;
+    color: rgb(0, 0, 0);
     text-align: center;
     align-content: center;
 }
@@ -19,7 +19,7 @@
 
 .messages {
     padding: 16px;
-    color: red;
+    color: rgb(0, 0, 0);
 }
 
 .dialogs img {
