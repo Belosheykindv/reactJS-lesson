@@ -1,19 +1,16 @@
 import React from 'react';
 import './App.css';
 // import Header from './Components/Header/header';
-import { Navigate, NavLink } from 'react-router-dom';
-import NavbarContainer from './Components/Navbar/NavbarContainer';
-import userPhoto from './Images/userPhoto.png'
+import { NavLink } from 'react-router-dom';
 import { logout } from './Redux/authReducer'
 // import ProfileContainer from './Components/Profile/profileContainer';
 import { Route, Routes } from 'react-router-dom';
 import MusicContainer from './Components/Music/Music';
 import SettingsContainer from './Components/Settings/Settings';
 // import DialogsContainer from './Components/Dialogs/Dialogs-container';
-import Users from './Components/Users/Users';
 // import UsersContainer from './Components/Users/usersContainer';
 import Login from './Components/Login/login';
-import { Component } from 'react';
+import Login2 from './Components/Login/loginRFF'
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { withRouter } from './Hoc/withRouter';
@@ -44,13 +41,6 @@ const App = (props) => {
   useEffect(() => {
     props.initializedApp();
   }, [])
-  // const [state, setState] = useState({});
-  // useEffect(() => {
-  //   props.initializedApp();
-  //   return () => {
-  //     setState({}); // This worked for me
-  //   };
-  // }, []);
   if (!props.store.app.initialize) {
     return <Preloader />
   } else
@@ -136,8 +126,9 @@ const App = (props) => {
               <Route path='/music' element={<MusicContainer />} />
               <Route path='/settings' element={<SettingsContainer />} />
               <Route path='/users' element={<UsersContainer />} />
-              <Route path='/login' element={<Login />} />
-              <Route path='/' element={<Login />} />
+              <Route path='/login' element={<Login2 />} />
+              <Route path='/login2' element={<Login />} />
+              <Route path='/' element={<Login2 />} />
             </Routes>
 
           </Content>

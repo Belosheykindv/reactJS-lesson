@@ -1,6 +1,8 @@
 import React from "react"
 import styles from "./formControls.module.css"
-import { Field } from "redux-form";
+// import { Field } from "redux-form";
+
+import { Field } from 'react-final-form'
 
 export const FormCreate = ({ input, meta, fieldType, ...props }) => {
     const hasError = meta.touched && meta.error;
@@ -13,6 +15,7 @@ export const FormCreate = ({ input, meta, fieldType, ...props }) => {
         </div>
     )
 }
+
 export const Textarea = (props) => {
     const { input, meta, child, ...restProps } = props;
     return <FormCreate {...props}><textarea {...input} {...restProps} /> </FormCreate>

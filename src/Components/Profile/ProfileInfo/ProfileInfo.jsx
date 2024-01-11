@@ -36,7 +36,6 @@ const ProfileInfo = (props) => {
             editModeAboutMe={props.editModeAboutMe}
           />}
         </div>
-
       </div>
     </div>
   </div>

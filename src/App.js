@@ -10,6 +10,7 @@ import DialogsContainer from './Components/Dialogs/Dialogs-container';
 // import Users from './Components/Users/Users';
 import UsersContainer from './Components/Users/usersContainer';
 import Login from './Components/Login/login';
+import Login2 from './Components/Login/loginRFF';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
@@ -43,6 +44,7 @@ class App extends Component {
             <Route path='/settings' element={<SettingsContainer />} />
             <Route path='/users' element={<UsersContainer />} />
             <Route path='/login' element={<Login />} />
+            <Route path='/login2' element={<Login2 />} />
           </Routes>
         </div>
       </div>
